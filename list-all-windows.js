@@ -1,20 +1,15 @@
 const systemEvents = Application('System Events');
 
 const printFrontmost = () => {
-  for(const process of systemEvents.applicationProcesses()) {
-    if(process.frontmost() === true) {
-      console.log('process name', process.name());
-      const window = process.windows()[0];
-      console.log('  window title', window.title());
-      console.log('    window position', window.position());
-      if(window.focused()) {
-        console.log('***************')
-      }
-    }
+  const ap = systemEvents.applicationProcesses().find(ap => ap.frontmost() === true);
+  if(!ap) {
+    return;
   }
+  if(ap.windows.length === 0) {
+    return;
+  }
+  const window = ap.windows[0];
+  console.log(window.position());
 };
 
-while(true){
-  printFrontmost();
-  delay(5);
-}
+printFrontmost();
